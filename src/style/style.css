@@ -1,0 +1,109 @@
+html,body{
+    height: 100%;
+}
+
+ul{
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width:1000px){
+    .aside{
+        display: none !important;
+    }
+}
+
+.bg-dark{
+    background-color: #222;
+}
+.font-white{
+    color: white;
+}
+.padding-left{
+    padding-left: 10px;
+}
+.margb20{
+    margin-bottom: 20px;
+}
+
+.dropdown-menu>li>span{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.btn .caret{
+    margin-top: -6px;
+}
+
+.footer{
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: 0;
+}
+
+.title{
+    font-size: 24px;
+}
+
+.flex_box{
+    display: flex;
+}
+.flex_box .aside{
+    margin-right: 15px;
+    width: 160px;
+}
+.flex_box .main{
+    flex: 1;
+    margin: 0 15px;
+}
+.sideNav .nav-list{
+    list-style: none;
+    border-radius: 0 10px 10px 0;  
+    overflow: hidden;
+}
+.sideNav .nav-item{
+    border-bottom:1px solid gray;
+}
+.sideNav .nav-item>a{
+    display: block;
+    padding: 0 10px;
+    line-height: 40px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+.sideNav .nav-item>a.active,.sideNav .nav-item>a:hover{
+    background-color: #222;
+}
+.sideNav .nav-item i{
+    margin-right: 10px;
+}
+.sideNav .nav-item:last-of-type{
+    border-bottom: none;
+}
+.table-box{
+    min-width: 100%;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+.toolbar .nav-pills>li{
+    margin-right: 10px;
+}
+
+.pager{
+    padding: 0 20px;
+}
+
+.login{
+    margin-top: 50px;
+    width: 450px;
+}

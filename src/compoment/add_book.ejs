@@ -1,0 +1,60 @@
+<% var title = name=='addbook' ? '新增':'编辑';var showtab = name=='addbook' ? 1 : 2;var book = bookdata[0] %>
+<% var bookAction = showtab == 1 ? '/bookadd' : '/bookedit' %>
+
+
+<div class="title margb20">
+    <i class="glyphicon glyphicon-bookmark"></i>
+    <%=title%>书藉
+</div>
+<form class="form-horizontal"id="formBook" enctype="multipart/form-data">
+
+        <input type="hidden" name="book_id" value=<%=book.book_id || ''%> >      
+        <div class="form-group">
+            <label for="bookname" class="col-sm-2 control-label">书名</label>
+            <div class="col-sm-10">
+                <input type="text" required class="form-control" id="bookname" name="bookname" placeholder="输入书名" value=<%=book.bookname || ''%>>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="bookauthor" class="col-sm-2 control-label">作者</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="bookauthor" name="author" placeholder="输入书名作者"value=<%=book.author || ''%> >
+            </div>
+        </div>
+        <% if(showtab==1){%>
+        <div class="form-group">
+            <label for="bookfile" class="col-sm-2 control-label">上传书藉</label>
+            <div class="col-sm-10">
+                <input type="file" id="bookfile" name="bookfile" multiple>
+            </div>
+        </div>
+        <%}%>
+        <div class="form-group">
+            <label for="introduction" class="col-sm-2 control-label">简介</label>
+            <div class="col-sm-10">
+                <div id="editor">
+                    <%-book.introduction || ''%>
+                </div>
+                <textarea id="textarea" style="display:none" name="introduction"></textarea>    
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">类别</label>
+            <div class="col-sm-10">
+                    <input type="hidden" name="type" id="booktype" value=<%=book.type || ''%>/>  
+                    <div class="dropdown" id="booktypeSelect">
+                        <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%=book.type || '类型'%> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><span>玄幻</span></li>
+                            <li><span>修真</span></li>
+                            <li><span>武侠</span></li>
+                        </ul>
+                    </div>
+            </div>
+        </div>
+        <div class="form-group text-center">
+
+            <button type="button" class="btn btn-primary" id="formbook_btn" data-action=<%=bookAction%> >确定</button>
+            <button type="reset" class="btn btn-default">重置</button>
+        </div>
+</form>

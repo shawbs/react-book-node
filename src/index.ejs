@@ -1,0 +1,43 @@
+<%include ./compoment/header_nav.ejs%>
+
+<section class="flex_box">
+        <div class="aside  sideNav">
+            <ul class="nav-list">
+                <li class="nav-item active">
+                    <a href="/admin/book">
+                        <i class="glyphicon glyphicon-th-list"></i>   
+                        书藉管理
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                        未开发  
+                    </a> 
+                </li>
+                <li class="nav-item">
+                    <a href="javascript:void(0)">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                        未开发
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="main">
+            <% if(name=='managebook'){%>
+                <%include ./compoment/manage_book.ejs%>
+            <%}%>
+            <% if(name=='addbook'){%>
+                <%include ./compoment/add_book.ejs%>
+            <%}%>
+            <% if(name=='editbook'){%>
+                <%include ./compoment/add_book.ejs%>
+            <%}%>
+        </div>
+    </section>
+
+
+<%include ./compoment/footer.ejs%>
+
+

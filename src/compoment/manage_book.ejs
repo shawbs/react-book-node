@@ -1,0 +1,86 @@
+<%
+    const result = JSON.parse(data);
+    let bookdata = result.data;
+    let other = result.other;
+    function dateFormat(date){
+        let d = new Date(date);
+        return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    }
+    //分页相关
+    let currentpage = Number(other.index);
+    let pagenum = Number(other.page);
+    let prevpage = (currentpage-1)<=0?1:(currentpage-1);
+    let nextpage = (currentpage+1)>=pagenum?pagenum:(currentpage+1);
+    /*  分页end*/
+%>
+
+<div class="title">
+    <i class="glyphicon glyphicon-bookmark"></i>
+    书藉管理
+</div>
+<div class="table-box padding-left">
+    <table class="table">
+        <caption>书藉项</caption>
+        <thead>
+            <tr>
+                <th width="30"></th>
+                <th>类型</th>
+                <th>书名</th>
+                <th>简介</th>
+                <th>作者</th>
+                <th>上传时间</th>
+                <th>更新时间</th>
+                <th width="150">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%if(bookdata){%>
+                <% bookdata.forEach(function(item,index){ %>
+                <tr>
+                    <td>
+                        <input type="checkbox" class="checkbox" data-id=<%=item.book_id%>>
+                    </td>
+                    <td><%=item.type%></td>
+                    <td><%=item.bookname%></td>
+                    <%let introduction = item.introduction.substr(0,6)%>
+                    <td><%=introduction%></td>
+                    <td><%=item.author%></td>
+                    <td><%=dateFormat(item.createAt)%></td>
+                    <td><%=dateFormat(item.updateAt)%></td>
+                    <td>
+                        <a href=<%= '/admin/book/editbook/' + item.book_id %> class="btn btn-primary">编辑</a>
+                        <button type="button" data-id=<%=item.book_id%> class="btn btn-danger btn-delete" >删除</button>
+                    </td>
+                </tr>
+                <% }) %>
+            <%}%>
+        </tbody>
+    </table>
+</div>
+<div class="toolbar">
+    <ul class="pager">
+        
+        <%if(pagenum>1){%>
+
+            <%if(currentpage==1){%>
+                <li  class="disabled"><a href='javascript:;'>上一页</a></li>
+            <%}else{%>
+                <li><a href=<%='/admin/book?page=' + prevpage%> >上一页</a></li>
+            <%}%>
+
+            <%if(currentpage==pagenum){%>
+                <li  class="disabled"><a href='javascript:;'>下一页</a></li>
+            <%}else{%>
+                <li><a href=<%='/admin/book?page=' + nextpage%> >下一页</a></li>
+            <%}%>
+
+        <%}%>
+        <span class="pull-right">&nbsp;&nbsp;&nbsp;<%=other.total%>记录</span>
+        <b class="pull-right"><%=other.page%>页</b>
+        <span class="pull-right"><%=other.index%>/</span>
+    </ul>
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="/admin/book/addbook">新增</a></li>
+        <li role="presentation"><a href="#" id="remove_book_all">批量删除</a></li>
+    </ul>
+</div>
