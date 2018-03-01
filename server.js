@@ -11,7 +11,7 @@ const _ = require('underscore');
 
 const conf = require('./public/config/conf');
 const url = conf.path;
-const port = process.env.PORT || conf.port;
+const port = process.env.PORT || conf[conf.env].port;
 
 
 app.set('views', path.join(__dirname,'src'));

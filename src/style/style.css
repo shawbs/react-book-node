@@ -1,5 +1,5 @@
 html,body{
-    height: 100%;
+    /* min-height: 100%; */
 }
 
 ul{
@@ -41,7 +41,7 @@ ul{
 }
 
 .footer{
-    position: absolute;
+    /* position: absolute; */
     left: 0;
     right: 0;
     width: 100%;
@@ -50,6 +50,9 @@ ul{
 
 .title{
     font-size: 24px;
+}
+.red{
+    color: #f00;
 }
 
 .flex_box{
@@ -106,4 +109,8 @@ ul{
 .login{
     margin-top: 50px;
     width: 450px;
+}
+
+.form-horizontal .form-group label{
+    text-align: right;
 }

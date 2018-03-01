@@ -2,7 +2,12 @@
 $(document).ready(function($){
 
 
-
+    var footer = $('.footer');
+    if(document.body.clientHeight<window.innerHeight){
+        footer.css('position','absolute')
+    }else{
+        footer.css('position','static')
+    }
 
 
 
@@ -17,7 +22,7 @@ $(document).ready(function($){
         console.log($(this).data('id'));
 
 
-        $.get('/delete',{id:$(this).data('id')},function(data){
+        $.get(API.removeBook,{id:$(this).data('id')},function(data){
             if(data.state){
                 location.reload();
             }
@@ -35,7 +40,7 @@ $(document).ready(function($){
         })
 
         if(ids.length > 0){
-            $.post('/deleteMore',{ids:ids},function(data){
+            $.post(API.removeBooks,{ids:ids},function(data){
                 if(data.state){
                     location.reload();
                 }
@@ -50,32 +55,22 @@ $(document).ready(function($){
     $('#formbook_btn').on('click',function(){
         let form = $('#formBook');
         let action = $(this).data('action');
-        
-
         // upload
-        if(action == '/bookadd'){
-            bookUpload(form)
-            .success(function(res){
-                // $.post(action,form.serialize(),function(data){
-                    console.log(res)
-                    alert(res.message)
-                // })
-            })
-            .error(function(err){
-                console.log(err)
-            })
-
-
-            
+        if(action == 'add'){
+            bookAdd(form);    
         }
-
-        if(action == '/bookedit'){
-            console.log(form.serialize())
-            $.post(action,form.serialize(),function(data){
-                console.log(data)
-                alert(data.message)
-            })
+        
+        if(action == 'edit'){
+            bookEdit(form);
         }
+    })
+
+
+    $('#bookInput').change(function(){
+        bookUpload()
+        .success(function(res){
+            $('.uploadtip').html(res.message)
+        })
     })
 
     // user_goup
@@ -89,54 +84,64 @@ $(document).ready(function($){
     })
 
     $('#loginoutBtn').on('click',function(){
-        $.get('/loginout',function(data){
+        $.get(API.exit,function(data){
             if(data.state){
                 alert(data.message);
-                location.pathname = '/admin/login'
+                location.pathname = '/admin/login.htm'
             }
         })
     })
 
 
-    //编辑器
-    var E = window.wangEditor;
-    var editor2 = new E('#editor');
-    var $textarea = $('#textarea');
-    editor2.customConfig.onchange = function(html){
-        $textarea.val(html);
-    }
-    editor2.create();
-    $textarea.val(editor2.txt.html());
+
 
 })
 
 
-
+//登录
 function Login(){
     let form = $('#loginForm');
-    $.post('/login',form.serialize(),function(data){
+    $.post(API.login,form.serialize(),function(data){
         if(data.state){
 
-            // localStorage.setItem('token',data.token);
+            localStorage.setItem('token',data.token);
             // localStorage.setItem('userdata',data.data);
-            // localStorage.setItem('account',data.data.username);
-            // location.pathname = '/admin/book';
+            localStorage.setItem('account',data.data.username);
+            location.href = '/admin/book.htm';
         }else{
             alert(data.message);
         }
     })
 }
 
-function bookUpload(form){
-    let formData = new FormData(form[0]);
-    // formData.append("bookfile", document.getElementById("bookfile").files[0]);   
+//上传书籍
+function bookUpload(){
+    var formData = new FormData();
+    var input = document.getElementById('bookInput');
+    for(var i =0;i<input.files.length;i++){
+        formData.append('books',input.files[i])
+    }
+
+    
     return $.ajax({
-        url:'/bookupload',
+        url:API.bookUpload,
         type:'POST',
         data:formData,
         contentType:false,
         processData:false
     })  
+}
+
+function bookAdd(form){
+    $.post(API.addBook,form.serialize(),function(data){
+        alert(data.message)
+    })
+}
+
+function bookEdit(form){
+    $.post(API.editBook,form.serialize(),function(data){
+        alert(data.message)
+    })
 }
 
 

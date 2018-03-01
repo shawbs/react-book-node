@@ -4,20 +4,7 @@ const BookControl = require('../controller/book');
 
 
 
-/**
- * 
- * 
- * @param {any} req 
- * @param {any} res 
- * @param {any} next 
- */
-const loginVerify = function(req,res,next){
-    if(!req.session.account){
-        res.redirect('/admin/login')
-    }else{
-        next();
-    }
-}
+
 /**
  * 重定向到首页路由
  * 
@@ -38,9 +25,8 @@ const admin_index = function(req,res){
 const admin_book_index = function(req,res){
 
     let page = req.query.page || 1;
-    console.log(req.session)
     BookControl.groupbyBook(page).then(vals=>{
-        res.render('index',{name:'managebook',account:req.session.account,data:JSON.stringify(vals)})
+        res.render('index',{name:'managebook',data:JSON.stringify(vals)})
     }).catch(err=>{
         console.error(err);
     })
@@ -55,7 +41,7 @@ const admin_book_index = function(req,res){
  * @param {any} res 
  */
 const admin_book_add = function(req,res){
-    res.render('index',{name:'addbook',account:req.session.account,bookdata:[{}]})
+    res.render('index',{name:'addbook',bookdata:[{}]})
 }
 
 const admin_book_edit = function(req,res){
@@ -64,7 +50,7 @@ const admin_book_edit = function(req,res){
             console.error(err);
             return;
         }
-        res.render('index',{name:'editbook',account:req.session.account,bookdata:data})
+        res.render('index',{name:'editbook',bookdata:data})
     })
 }
 
@@ -74,9 +60,9 @@ const admin_login = function(req,res){
 }
 
 module.exports = {
-    'GET /admin/':admin_index,
-    'GET /admin/book':admin_book_index,
-    'GET /admin/book/addbook':admin_book_add,
-    'GET /admin/book/editbook/:id':admin_book_edit,
-    'GET /admin/login':admin_login
+    'GET /admin.htm':admin_index,
+    'GET /admin/book.htm':admin_book_index,
+    'GET /admin/book/addbook.htm':admin_book_add,
+    'GET /admin/book/editbook.htm/:id':admin_book_edit,
+    'GET /admin/login.htm':admin_login
 }

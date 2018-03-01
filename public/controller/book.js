@@ -30,15 +30,36 @@ module.exports = {
         },
     
         /**
-         * 通过booknam获取书藉
+         * 通过bookname获取书藉
          * 
-         * @param {any} bookname 
-         * @param {any} cb 
+         * @param {string} bookname 
+         * @param {function} cb 
          */
         fetchBookByName:function(bookname,cb){
             let sql = 'SELECT * FROM book WHERE bookname = ?';
             query(sql,bookname,function(err,data,fields){
-                cb(err,data,fields)
+                if(err){
+                    cb(false,err)
+                }else{
+                    cb(data,'');
+                }
+            })
+        },
+
+        /**
+         * 通过type获取书藉
+         * 
+         * @param {string} type 
+         * @param {function} cb 
+         */
+        fetchBookByType:function(type,cb){
+            let sql = 'SELECT * FROM book WHERE type = ?';
+            query(sql,type,function(err,data,fields){
+                if(err){
+                    cb(false,err)
+                }else{
+                    cb(data,'');
+                }
             })
         },
     
@@ -49,15 +70,27 @@ module.exports = {
          * @param {any} cb 
          */
         addBook:function(book,cb){
-            let sql = 'INSERT INTO book(bookname,author,introduction,type) VALUES (?,?,?,?)';
+            let sql = 'INSERT INTO book(bookname,author,introduction,type,isHot,isRecommend) VALUES (?,?,?,?,?,?)';
             let insertSql_params = [
                 book.bookname,
                 book.author,
                 book.introduction,
-                book.type
+                book.type,
+                !!book.isHot,
+                !!book.isRecommend
             ];
             query(sql,insertSql_params,function(err,data,fields){
-                cb(err,data,fields)
+                if(err){
+                    if(err.errno==1062){
+                        cb(false,'书名已存在');
+                    }else{
+                        cb(false,'未知错误');
+                    }
+                    console.error(err);
+                }else{
+                    cb(data,fields)
+                }
+                
             })
         },
         /**
@@ -68,12 +101,14 @@ module.exports = {
          * @param {any} cb 
          */
         editBook:function(book_id,book,cb){
-            let sql = 'UPDATE book SET bookname=?,author=?,introduction=?,type=? WHERE book_id=?';
+            let sql = 'UPDATE book SET bookname=?,author=?,introduction=?,type=?,isHot=?,isRecommend=? WHERE book_id=?';
             let insertSql_params = [
                 book.bookname,
                 book.author,
                 book.introduction,
                 book.type,
+                !!book.isHot,
+                !!book.isRecommend,
                 book_id
             ];
             query(sql,insertSql_params,function(err,data,fields){
@@ -118,6 +153,8 @@ module.exports = {
             // console.log(index,count)
             return co(gen(index,count));
         }
+
+
         
 }
 
