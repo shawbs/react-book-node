@@ -9,7 +9,31 @@ $(document).ready(function($){
         footer.css('position','static')
     }
 
+    $('#hotBtn').on('click', function(){
+       
+       if(!$(this).hasClass('on')){
+        $('[data-hot=1]').show();
+        $('[data-hot=0]').hide();
+        $(this).addClass('on');
+       }else{
+        $('[data-hot=0]').show();
+        $(this).removeClass('on');
+       }
 
+    })
+
+    $('#recommendBtn').on('click', function(){
+        
+        if(!$(this).hasClass('on')){
+         $('[data-recommend=1]').show();
+         $('[data-recommend=0]').hide();
+         $(this).addClass('on');
+        }else{
+         $('[data-recommend=0]').show();
+         $(this).removeClass('on');
+        }
+        
+     })
 
     $('#booktypeSelect').on('click', '.dropdown-menu li',function(e){
         $('#booktype').val($(e.target).text());
@@ -86,7 +110,8 @@ $(document).ready(function($){
     $('#loginoutBtn').on('click',function(){
         $.get(API.exit,function(data){
             if(data.state){
-                alert(data.message);
+                localStorage.removeItem('account');
+                localStorage.removeItem('token');
                 location.pathname = '/admin/login.htm'
             }
         })

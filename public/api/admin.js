@@ -2,7 +2,7 @@
 
 const BookControl = require('../controller/book');
 
-
+const  util = require('../script/common');
 
 
 /**
@@ -13,7 +13,7 @@ const BookControl = require('../controller/book');
  */
 const admin_index = function(req,res){
     
-    res.redirect('/admin/book');
+    res.redirect('/admin/book.htm');
 }
 
 /**
@@ -57,6 +57,21 @@ const admin_book_edit = function(req,res){
 
 const admin_login = function(req,res){
     res.render('./page/login')
+}
+
+/**
+ *token验证
+ * @param {*} req 
+ * @param {*} res 
+ */
+const verifyToken = function(req,res){
+	let {accessToken} = req.body;
+	let {decoded,exType} = util.verifyToken(accessToken);
+    if(exType != 1){
+        res.json({state:false,message:'invalid token'})
+    }else{
+        res.json({state:true,msg:''});
+    }
 }
 
 module.exports = {

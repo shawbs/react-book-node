@@ -12,5 +12,7 @@ var API = {
     removeBook: '/sg/book/delete',
     removeBooks: '/sg/book/delete/more',
     editBook: '/sg/book/edit',
-    bookUpload: '/sg/book/upload'
+    bookUpload: '/sg/book/upload',
+    fetchHotBook: '/sg/book/fetchBookByHot',
+    fetchRecommendBook: '/sg/book/fetchBookByRecommend'
 }

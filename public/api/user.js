@@ -32,7 +32,7 @@ const fn_admin_login = function (req, res)  {
 		}
 
 		if(data.length == 0){
-			res.json({state:false,message:"帐户不存在",errorCode:10001});
+			res.json({state:false,message:"帐户不存在"});
 			return;
 		}
 
@@ -40,9 +40,9 @@ const fn_admin_login = function (req, res)  {
 			
 			if(password === data[0].password){
 				let result = util.ArrFilter(data,['password,user_id']);
-				res.json({state:true,data:result[0]});
+				res.json({state:true,data:result[0],token: util.getJwt()});
 			}else{
-				res.json({state:false,message:"密码错误",errorCode:10001});
+				res.json({state:false,message:"密码错误"});
 			}
 
 		}else{
@@ -127,8 +127,29 @@ const  fn_register = function(req,res){
  * @param {any} res 
  */
 const refreshAccessToken = function(req,res){
-	let {AccessToken} = req.body;
+	let {accessToken} = req.body;
+	let {decoded,exType} = util.verifyToken(accessToken);
+	let _token = util.getJwt();
+	if(exType.exType == 1 || exType.exType == 2){
+        res.json({state:true,token: _token, message:''})
+    }else{
+        res.json({state:false,message:'入参错误'});
+    }	
+}
 
+/**
+ * 添加token验证路由,添加到需要验证的路由中间件中
+ * @param {*} req 
+ * @param {*} res 
+ */
+const httpVerifyToken = function(req,res){
+	let {accessToken} = req.body;
+	let {decoded,exType} = util.verifyToken(accessToken);
+    if(exType != 1){
+        res.json({state:false,message:'invalid token'})
+    }else{
+        res.next();
+    }
 }
 
 /**

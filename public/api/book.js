@@ -52,7 +52,10 @@ const bookDeleteMore = function(req,res){
 
 const getbookbypage = function(req,res){
     let index = req.query.page|| 1;
-    BookControl.groupbyBook(index,5).then(vals=>{
+    let count = 5;
+    let ex_type = req.query.ex_type || '';
+    let type_value = req.query.type_value || '';
+    BookControl.groupbyBook(index,count,ex_type,type_value).then(vals=>{
         res.json({state:true,data:vals})
     }).catch(err=>{
         console.error(err)
@@ -123,11 +126,36 @@ const bookupload = function(req,res,next){
     console.log('upload end------------------------')
 }
 
+const fetchBookByHot = function(req,res){
+    BookControl.fetchBookByHot((err,data)=>{
+        if(err){
+            res.json({state:false,message:'未知错误'});
+            console.error(err);
+        }else{
+            res.json({state:true,data:data,message:''});
+        }
+    });
+}
+
+const fetchBookByRecommend = function(req,res){
+    BookControl.fetchBookByRecommend((err,data)=>{
+        if(err){
+            res.json({state:false,message:'未知错误'});
+            console.error(err);
+        }else{
+            res.json({state:true,data:data,message:''});
+        }
+    });
+}
+
 module.exports = {
     'GET /sg/getbook/forpage':getbookbypage,
+
     'POST /sg/book/edit':bookEdit,
     'POST /sg/book/add':bookAdd,
     'GET /sg/book/delete':bookDelete,
     'POST /sg/book/delete/more':bookDeleteMore,
-    'POST /sg/book/upload':[bookupload_first,bookupload]
+    'POST /sg/book/upload':[bookupload_first,bookupload],
+    'GET /sg/book/fetchBookByHot': fetchBookByHot,
+    'GET /sg/book/fetchBookByRecommend': fetchBookByRecommend
 }

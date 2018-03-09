@@ -55,36 +55,31 @@ const getJwt = function(hours){
 
 /**
  * 验证token
- * @param {string} token 
+ * @param {string} token
+ * @return {object} 
  */
 const verifyToken = function(token){
-    var decoded
+    var 
+    decoded, // 解码后的信息
+    exType; // exType 1-有效 2-过期 3-token错误
+   
     try {
         decoded = jwt.verify(token, md5(secret));
+        exType = 1;
     } catch(err) {
         // err
-        decoded = null;
+        console.log(err)
+        if(err.name == 'TokenExpiredError'){
+            exType = 2;
+        }else{
+            exType = 3;
+        }
     }
-    return decoded;
-}
-
-/**
- * 添加路由token验证
- * @param {*} req 
- * @param {*} res 
- */
-const httpVerifyToken = function(req,res){
-    let {accessToken} = req.body;
-    if(!verifyToken(accessToken)){
-        res.json({state:false,message:'invalid token'})
-    }else{
-        res.next();
-    }
+    return {decoded,exType};
 }
 
 module.exports = {
     ArrFilter,
     getJwt,
-    verifyToken,
-    httpVerifyToken
+    verifyToken
 }

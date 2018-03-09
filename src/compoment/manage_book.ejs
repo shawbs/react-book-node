@@ -38,13 +38,16 @@
         <tbody>
             <%if(bookdata){%>
                 <% bookdata.forEach(function(item,index){ %>
-                <tr>
+                <tr data-hot=<%=item.isHot%> data-recommend=<%=item.isRecommend%> >
                     <td>
                         <input type="checkbox" class="checkbox" data-id=<%=item.book_id%>>
                     </td>
                     <td><%=item.type%></td>
                     <td><%=item.bookname%></td>
-                    <%let introduction = item.introduction.substr(0,6)%>
+                    <%  
+                        let introduction = item.introduction.substr(0,6);
+                        introduction = introduction.length==6 ? introduction+'...' : introduction; 
+                    %>
                     <td><%=introduction%></td>
                     <td><%=item.author%></td>
                     <td><%=item.isHot%></td>
@@ -86,5 +89,7 @@
     <ul class="nav nav-pills">
         <li role="presentation" class="active"><a href="/admin/book/addbook.htm">新增</a></li>
         <li role="presentation"><a href="#" id="remove_book_all">批量删除</a></li>
+        <li role="presentation"><a href="#" id="hotBtn">热门</a></li>
+        <li role="presentation"><a href="#" id="recommendBtn">推荐</a></li>
     </ul>
 </div>

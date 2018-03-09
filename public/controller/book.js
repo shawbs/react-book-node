@@ -62,7 +62,41 @@ module.exports = {
                 }
             })
         },
-    
+
+        /**
+         * 获取热门书藉
+         * 
+         * @param {string} type 
+         * @param {function} cb 
+         */
+        fetchBookByHot: function(cb){
+            let sql = 'SELECT * FROM book WHERE isHot = 1';
+            query(sql,undefined,function(err,data,fields){
+                if(err){
+                    cb(false,err)
+                }else{
+                    cb(data,'');
+                }
+            })
+        },
+
+        /**
+         * 获取推荐书藉
+         * 
+         * @param {string} type 
+         * @param {function} cb 
+         */
+        fetchBookByRecommend: function(cb){
+            let sql = 'SELECT * FROM book WHERE isRecommend = 1';
+            query(sql,undefined,function(err,data,fields){
+                if(err){
+                    cb(false,err)
+                }else{
+                    cb(data,'');
+                }
+            })
+        },
+
         /**
          * 新增书藉
          * 
@@ -144,15 +178,17 @@ module.exports = {
 
         /**
          * 
-         * 分页查询book
+         * 分页查询book全部
          * @param {number} index 当前页索引
-         * @param {number} 第页要显示的条目
+         * @param {number} count 页要显示的条目
+         * @param {string} 类型分页 默认为空
+         * @param {string} 类型值
          * @return Promise 
          */
-        groupbyBook:function(index=1,count=5){
+        groupbyBook:function(index=1,count=5,type = '',typeValue = ''){
             // console.log(index,count)
-            return co(gen(index,count));
-        }
+            return co(genBookPage(index,count,type,typeValue));
+        },
 
 
         
@@ -166,14 +202,22 @@ module.exports = {
  * @param {any} count 
  * @returns generator函数
  */
-function* gen(index,count){
+function* genBookPage(index,count,type,typeValue){
 
-    let sql_groupby = 'SELECT * FROM book LIMIT ?,?';
-    let sql_count  ='SELECT COUNT(*) FROM book';
-    
+    let sql_groupby;
+    let sql_count;
+    let parameter1 = null,parameter2 = null;
+    if(!!type){
+        sql_groupby = 'SELECT * FROM book WHERE ${type}=? LIMIT ?,?';
+        sql_count  =`SELECT COUNT(*) FROM book WHERE ${type}=?`;
+        parameter1 = typeValue;
+    }else{
+        sql_groupby = 'SELECT * FROM book LIMIT ?,?';
+        sql_count  ='SELECT COUNT(*) FROM book';
+    }
 
     let f1 =  new Promise((resolve,reject)=>{
-        query(sql_count,undefined,function(err,data,fields){
+        query(sql_count,parameter1,function(err,data,fields){
             if(err) reject(err);
             if(typeof data != 'undefined'){
                 let total = data[0]['COUNT(*)'];
@@ -189,11 +233,19 @@ function* gen(index,count){
     
     let f2 =  new Promise((resolve,reject)=>{
         let i = index-1;
-        let sqlparams = [
-            i*count,
-            count
-        ];
-        query(sql_groupby,sqlparams,function(err,data,fields){
+        if(!!type){
+            parameter2 = [
+                typeValue,
+                i*count,
+                count
+            ]
+        }else{
+            parameter2 = [
+                i*count,
+                count
+            ];
+        }
+        query(sql_groupby,parameter2,function(err,data,fields){
             if(err) reject(err);
             if(typeof data != 'undefined'){
                 resolve(data)
@@ -211,3 +263,5 @@ function* gen(index,count){
     }
     return res;
 }
+
+
