@@ -80,7 +80,7 @@ const fn_login = function(req,res){
 
 		if(password === data[0].password){
 			let result = util.ArrFilter(data,['password','user_id']);
-			res.json({state:true,data:result});
+			res.json({state:true,data:result[0],token: util.getJwt()});
 		}else{
 			res.json({state:false,message:"密码错误"});
 		}

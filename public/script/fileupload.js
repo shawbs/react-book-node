@@ -10,8 +10,12 @@ const getMulter = function(option){
             //TODO:文件区分目录存放
             //获取文件MD5，重命名，添加后缀,文件重复会直接覆盖
             filename: function (req, file, cb) {
+                var _filename = req.body.filename;
                 var fileFormat =(file.originalname).split(".");
-                cb(null, fileFormat[0]  + "." + fileFormat[fileFormat.length - 1]);
+                if(!_filename){
+                    _filename = fileFormat[0];
+                }
+                cb(null, _filename + "." + fileFormat[fileFormat.length - 1]);
             }
         }),
         //其他设置请参考multer的limits

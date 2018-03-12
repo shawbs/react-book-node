@@ -104,14 +104,15 @@ module.exports = {
          * @param {any} cb 
          */
         addBook:function(book,cb){
-            let sql = 'INSERT INTO book(bookname,author,introduction,type,isHot,isRecommend) VALUES (?,?,?,?,?,?)';
+            let sql = 'INSERT INTO book(bookname,author,introduction,type,isHot,isRecommend,avatar) VALUES (?,?,?,?,?,?,?)';
             let insertSql_params = [
                 book.bookname,
                 book.author,
                 book.introduction,
                 book.type,
                 !!book.isHot,
-                !!book.isRecommend
+                !!book.isRecommend,
+                book.avatar
             ];
             query(sql,insertSql_params,function(err,data,fields){
                 if(err){
@@ -135,7 +136,7 @@ module.exports = {
          * @param {any} cb 
          */
         editBook:function(book_id,book,cb){
-            let sql = 'UPDATE book SET bookname=?,author=?,introduction=?,type=?,isHot=?,isRecommend=? WHERE book_id=?';
+            let sql = 'UPDATE book SET bookname=?,author=?,introduction=?,type=?,isHot=?,isRecommend=?,avatar=? WHERE book_id=?';
             let insertSql_params = [
                 book.bookname,
                 book.author,
@@ -143,7 +144,8 @@ module.exports = {
                 book.type,
                 !!book.isHot,
                 !!book.isRecommend,
-                book_id
+                book.avatar,
+                book_id,
             ];
             query(sql,insertSql_params,function(err,data,fields){
                 cb(err,data,fields)

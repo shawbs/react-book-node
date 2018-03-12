@@ -12,6 +12,7 @@
     let prevpage = (currentpage-1)<=0?1:(currentpage-1);
     let nextpage = (currentpage+1)>=pagenum?pagenum:(currentpage+1);
     /*  分页end*/
+
 %>
 
 <div class="title">
@@ -26,6 +27,7 @@
                 <th width="30"></th>
                 <th>类型</th>
                 <th>书名</th>
+                <th>封面</th>
                 <th>简介</th>
                 <th>作者</th>
                 <th>热门</th>
@@ -44,10 +46,16 @@
                     </td>
                     <td><%=item.type%></td>
                     <td><%=item.bookname%></td>
+                    
                     <%  
                         let introduction = item.introduction.substr(0,6);
                         introduction = introduction.length==6 ? introduction+'...' : introduction; 
                     %>
+                    <% if(item.avatar!=''){ %>
+                    <td> <image src=<%=item.avatar%> style="height:50px;width:40px"></image></td>
+                    <% }else{ %>
+                    <td> &nbsp;</td>
+                    <% } %>
                     <td><%=introduction%></td>
                     <td><%=item.author%></td>
                     <td><%=item.isHot%></td>

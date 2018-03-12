@@ -20,15 +20,17 @@ class Book {
      * @param {string} type 
      * @param {boolean} isHot 
      * @param {boolean} isRecommend 
+     * @param {string} avatar 
      * @memberof Book
      */
-    constructor(bookname,author,introduction,type,isHot,isRecommend){
+    constructor(bookname,author,introduction,type,isHot,isRecommend,avatar){
         this.bookname = bookname;
         this.author = author;
         this.introduction = introduction;
         this.type = type;
         this.isHot = isHot;
-        this.isRecommend = isRecommend
+        this.isRecommend = isRecommend;
+        this.avatar = avatar;
     }
 }
 

@@ -14,7 +14,8 @@ const bookEdit = function(req,res){ //1508722143960
         _book.introduction,
         _book.type,
         !!_book.isHot,
-        !!_book.isRecommend
+        !!_book.isRecommend,
+        _book.avatar
     )
     BookControl.editBook(_book.book_id,book,(err,data)=>{
         if(err){
@@ -97,7 +98,8 @@ const bookAdd = function(req,res){
         _book.introduction,
         _book.type,
         !!_book.isHot,
-        !!_book.isRecommend
+        !!_book.isRecommend,
+        _book.avatar
     )
     BookControl.addBook(book,(data,msg)=>{
         if(data){
@@ -125,6 +127,24 @@ const bookupload = function(req,res,next){
     }
     console.log('upload end------------------------')
 }
+
+const bookavatarupload_step1 =  upload({
+    path:conf[conf.env].book_avatar_upload_path,
+    type:'img'
+}).single('bookavatar')
+
+const bookavatarupload = function(req,res,next){
+console.log('upload------------------------')
+console.log(req.file)
+let file = req.file;
+if(file){
+    res.json({state:true,message:'文件上傳成功',data: conf[conf.env].book_avatar_upload_path + '/' + file.filename})
+}else{
+    res.json({state:false,message:'上传文件为空'})
+}
+console.log('upload end------------------------')
+}
+
 
 const fetchBookByHot = function(req,res){
     BookControl.fetchBookByHot((err,data)=>{
@@ -155,7 +175,8 @@ module.exports = {
     'POST /sg/book/add':bookAdd,
     'GET /sg/book/delete':bookDelete,
     'POST /sg/book/delete/more':bookDeleteMore,
-    'POST /sg/book/upload':[bookupload_first,bookupload],
+    'POST /sg/book/bookupload':[bookupload_first,bookupload],
+    'POST /sg/book/bookupload/avatar':[bookavatarupload_step1,bookavatarupload],
     'GET /sg/book/fetchBookByHot': fetchBookByHot,
     'GET /sg/book/fetchBookByRecommend': fetchBookByRecommend
 }

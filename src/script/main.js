@@ -2,12 +2,12 @@
 $(document).ready(function($){
 
 
-    var footer = $('.footer');
-    if(document.body.clientHeight<window.innerHeight){
-        footer.css('position','absolute')
-    }else{
-        footer.css('position','static')
-    }
+    // var footer = $('.footer');
+    // if(document.body.clientHeight<window.innerHeight){
+    //     footer.css('position','absolute')
+    // }else{
+    //     footer.css('position','static')
+    // }
 
     $('#hotBtn').on('click', function(){
        
@@ -91,9 +91,19 @@ $(document).ready(function($){
 
 
     $('#bookInput').change(function(){
-        bookUpload()
+        var input = document.getElementById('bookInput');
+        bookUpload($('#bookid').val(),'books',input, input,API.bookUpload)
         .success(function(res){
-            $('.uploadtip').html(res.message)
+            $('#bookInput ~ span').html(res.message)
+        })
+    })
+    $('#avatarInput').change(function(){
+        var input = document.getElementById('avatarInput');
+        bookUpload($('#bookid').val() + '_avatar','bookavatar',input,API.bookAvatarUpload)
+        .success(function(res){
+            $('#avatarInput ~ span').html(res.message)
+            $('#avatar').val(res.data)
+            $('#bookAvatar').attr('src',res.data)
         })
     })
 
@@ -140,16 +150,16 @@ function Login(){
 }
 
 //上传书籍
-function bookUpload(){
+function bookUpload(filename,file_key,input,url){
     var formData = new FormData();
-    var input = document.getElementById('bookInput');
+    formData.append('filename',filename);
     for(var i =0;i<input.files.length;i++){
-        formData.append('books',input.files[i])
+        formData.append(file_key,input.files[i])
     }
 
     
     return $.ajax({
-        url:API.bookUpload,
+        url:url,
         type:'POST',
         data:formData,
         contentType:false,
