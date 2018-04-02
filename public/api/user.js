@@ -80,7 +80,11 @@ const fn_login = function(req,res){
 
 		if(password === data[0].password){
 			let result = util.ArrFilter(data,['password','user_id']);
-			res.json({state:true,data:result[0],token: util.getJwt()});
+			if(req.body.remember){
+				res.cookie('rememberme', username, { expires: 0, httpOnly: true, signed: true });
+			}
+			res.json({state:true,data:result[0],token: util.getJwt(),message:'登录成功'});
+			
 		}else{
 			res.json({state:false,message:"密码错误"});
 		}
@@ -152,13 +156,24 @@ const httpVerifyToken = function(req,res){
     }
 }
 
+const verifyLogin = function(req,res){
+	let c = req.cookies
+	console.log(c)
+	if(c){
+		res.json({state: true,data:null,message:''})
+	}else{
+		res.json({state: false,message:'登录过期'})
+	}
+}
+
 /**
  * 用户退出
  * 
  * @param {any} req {}
  * @param {any} res 
  */
-const fu_login_out = function(req,res){
+const fn_login_out = function(req,res){
+	res.clearCookie('rememberme');
 	res.json({state:true,message:'用户已退出'})
 }
 
@@ -167,5 +182,6 @@ module.exports = {
 	'POST /sg/user/login': fn_login,
 	'POST /sg/user/register': fn_register,
 	'POST /sg/refreshAccessToken': refreshAccessToken,
-	'GET /sg/admin/exit':fu_login_out
+	'GET /sg/exit':fn_login_out,
+	'GET /sg/verifyLogin': verifyLogin
 }

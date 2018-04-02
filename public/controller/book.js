@@ -166,7 +166,7 @@ module.exports = {
                         sql+=' or book_id=?'
                     }
                 }
-                console.log(sql)
+                // console.log(sql)
                 query(sql,ids,function(err,data,fields){
                     cb(err,data,fields)
                 })

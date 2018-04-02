@@ -13,7 +13,7 @@ const conf = require('./public/config/conf');
 const url = conf.path;
 const port = process.env.PORT || conf[conf.env].port;
 
-
+app.use(cookieParser('secret'));
 app.set('views', path.join(__dirname,'src'));
 app.set('view engine', 'ejs');
 //静态资源请求路径

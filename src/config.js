@@ -7,7 +7,7 @@ var conf = {
 var API = {
     login: '/sg/admin/login',
     exit: '/sg/admin/exit',
-    getBookForPage: '/sg/getbook/forpage',
+    getBookForPage: '/sg/getbook/all',
     addBook: '/sg/book/add',
     removeBook: '/sg/book/delete',
     removeBooks: '/sg/book/delete/more',

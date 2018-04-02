@@ -90,7 +90,7 @@ const getbookbyname = function(req,res){
 
 const bookAdd = function(req,res){
     console.log('insert----------------------')
-    console.log(req.body)
+    // console.log(req.body)
     let _book = req.body;
     let book = new Book(
         _book.bookname,
@@ -108,7 +108,7 @@ const bookAdd = function(req,res){
             res.json({state:true,message:msg})
         }
     })
-    console.log('insert----------------------')
+    console.log('insert end----------------------')
 }
 
 const bookupload_first =  upload({
@@ -169,8 +169,7 @@ const fetchBookByRecommend = function(req,res){
 }
 
 module.exports = {
-    'GET /sg/getbook/forpage':getbookbypage,
-
+    'GET /sg/getbook/all':getbookbypage,
     'POST /sg/book/edit':bookEdit,
     'POST /sg/book/add':bookAdd,
     'GET /sg/book/delete':bookDelete,
